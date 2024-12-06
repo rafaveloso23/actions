@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: Terraform and Azure CLI Workflow
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: 'Terraform Job'
     runs-on: ubuntu-latest
     environment: production
 
@@ -20,39 +20,53 @@ jobs:
         shell: bash
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      # Step 1: Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      # Step 2: Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Terraform Init
-      run: terraform init
+      # Step 3: Terraform Initialization
+      - name: Terraform Init
+        run: terraform init
 
-    - name: Terraform Plan
-      run: terraform plan -input=false
+      # Step 4: Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan -input=false
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    # - name: Terraform Apply
-    #   if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-    #   run: terraform apply -auto-approve -input=false
+  azure-cli:
+    name: 'Azure CLI Job'
+    runs-on: ubuntu-latest
+    environment: production
 
-    - name: Azure CLI Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        
-    - name: Azure CLI script
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az account show
-          # You can write your Azure CLI inline scripts here.
+    needs: terraform # Ensures Terraform job completes before running Azure CLI job
 
-          
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Step 2: Login to Azure CLI
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Step 3: Execute Azure CLI Commands
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+            # Add additional Azure CLI commands as needed
