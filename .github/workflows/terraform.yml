@@ -1,4 +1,4 @@
-name: Terraform, Azure CLI, and ESLint Workflow
+name: Terraform, Azure CLI, and Annotations Workflow
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
 
-    needs: terraform # Ensures Terraform job completes after the Terraform job
+    needs: terraform # Ensures Terraform job completes before running Azure CLI job
 
     defaults:
       run:
@@ -71,35 +71,13 @@ jobs:
             az account show
             # Add additional Azure CLI commands as needed
 
-  eslint:
-    name: 'ESLint Job'
+  annotation-example:
+    name: 'Annotation Example Job'
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash
-
     steps:
-      # Step 1: Checkout repository
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # Step 2: Set up Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16' # Specify the Node.js version you use
-
-      # Step 3: Install dependencies
-      - name: Install Dependencies
-        run: npm install
-
-      # Step 4: Run ESLint
-      - name: Run ESLint
+      - name: Run with Annotations
         run: |
-          npx eslint . --format json -o eslint-report.json
-
-      # Step 5: Create Annotations for ESLint Issues
-      - name: Annotate ESLint Issues
-        run: |
-          jq -c '.[] | "::error file=" + .filePath + ",line=" + (.line|tostring) + "::" + .message' eslint-report.json | xargs -I{} echo {}
+          echo "::error file=README.md,line=10,col=5::Something went wrong"
+          echo "::warning file=app.js,line=45,col=13::This is a warning"
+          echo "::notice file=index.html,line=8,col=2::This is a notice"
