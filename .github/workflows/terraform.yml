@@ -39,9 +39,9 @@ jobs:
         run: terraform plan -input=false
 
   azure-cli:
-    name: 'Azure CLI Job'
+    name: 'Azure CLI Development'
     runs-on: ubuntu-latest
-    environment: production
+    environment: development
 
     needs: terraform # Ensures Terraform job completes before running Azure CLI job
 
@@ -58,9 +58,9 @@ jobs:
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
 
       # Step 3: Execute Azure CLI Commands
       - name: Azure CLI script
