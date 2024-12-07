@@ -1,9 +1,9 @@
-name: Terraform Workflow
+name: Terraform, Azure CLI, and Annotations Workflow
 
 on:
   push:
     branches:
-      - main
+      - "main"
   pull_request:
 
 permissions:
@@ -14,31 +14,34 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }} # Pass the environment (DEV or PROD)
+    environment: development
 
     steps:
       # Step 1: Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Step 2: Login to Azure
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets['AZURE_CLIENT_ID_' + github.event.inputs.environment] }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets['AZURE_SUBSCRIPTION_ID_' + github.event.inputs.environment] }}
-
-      # Step 3: Setup Terraform
+      # Step 2: Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      # Step 4: Run Terraform Apply for the Environment
-      - name: Terraform Apply
-        run: terraform apply -var "azure_client_id=${{ secrets['AZURE_CLIENT_ID_' + github.event.inputs.environment] }}" -input=false -auto-approve
+      # Step 3: Terraform Initialization
+      - name: Terraform Init
+        env:
+          AZURE_CLIENT_ID_DEV: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        run: terraform init
 
+      # Step 4: Terraform Plan
+      - name: Terraform Plan
+        env:
+          AZURE_CLIENT_ID_DEV: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        run: terraform plan
+
+      # Step 5: Terraform Apply
+      - name: Terraform Apply
+        run: terraform apply
 
 
   # azure-cli-prd:

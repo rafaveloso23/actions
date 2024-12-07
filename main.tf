@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "rg-hub" {
-  name     = "rg-actions-${var.azure_client_id}"
+  name     = "rg-actions"
   location = "eastus"
 }
