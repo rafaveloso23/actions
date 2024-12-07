@@ -29,16 +29,22 @@ jobs:
 
       # Step 3: Terraform Initialization
       - name: Terraform Init
+        env:
+          AZURE_CLIENT_ID_DEV: ${{ secrets.AZURE_CLIENT_ID_DEV }}
         run: terraform init
 
       # Step 4: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -input=false
+        env:
+          AZURE_CLIENT_ID_DEV: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        run: terraform plan -var "azure_client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -input=false
 
       # Step 5: Terraform Apply
-      # This step applies the changes from the plan to your Azure subscription
       - name: Terraform Apply
-        run: terraform apply -input=false -auto-approve
+        env:
+          AZURE_CLIENT_ID_DEV: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+        run: terraform apply -var "azure_client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -input=false -auto-approve
+
 
   # azure-cli-prd:
   #   name: 'Azure CLI Production'
