@@ -70,17 +70,3 @@ jobs:
           inlineScript: |
             az account show
             # Add additional Azure CLI commands as needed
-
-
-      - name: Setup terraform
-        uses: hashicorp/setup-terraform@v3
-      - name: Initialize
-        run: terraform init
-      - name: Plan
-        run: terraform plan -out .planfile
-      - name: Post PR comment
-        uses: borchero/terraform-plan-comment@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          #token: ${{ github.token }}
-          planfile: .planfile
