@@ -29,14 +29,10 @@ jobs:
 
       # Step 3: Terraform Initialization
       - name: Terraform Init
-        env:
-          AZURE_CLIENT_ID_DEV: ${{ secrets.AZURE_CLIENT_ID_DEV }}
         run: terraform init
 
       # Step 4: Terraform Plan
       - name: Terraform Plan
-        env:
-          AZURE_CLIENT_ID_DEV: ${{ secrets.AZURE_CLIENT_ID_DEV }}
         run: terraform plan
 
       # Step 5: Terraform Apply
