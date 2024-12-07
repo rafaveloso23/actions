@@ -2,7 +2,8 @@ name: Terraform, Azure CLI, and Annotations Workflow
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "main"
   pull_request:
 
 permissions:
@@ -10,40 +11,17 @@ permissions:
   id-token: write
 
 jobs:
-  azure-cli-dev:
-    name: 'Azure CLI Development'
+  terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
     environment: development
-
-    needs: terraform # Ensures Terraform job completes before running Azure CLI job
-
-    defaults:
-      run:
-        shell: bash
 
     steps:
       # Step 1: Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Step 2: Login to Azure CLI
-      - name: Azure CLI Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
-
-      # Step 3: Execute Azure CLI Commands
-      - name: Azure CLI script
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az account show
-            # Add additional Azure CLI commands as needed
-
-# Step 2: Setup Terraform
+      # Step 2: Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -57,35 +35,40 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false
 
-  azure-cli-prd:
-    name: 'Azure CLI Production'
-    runs-on: ubuntu-latest
-    environment: production
+      # Step 5: Terraform Apply
+      # This step applies the changes from the plan to your Azure subscription
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve
 
-    needs: terraform # Ensures Terraform job completes before running Azure CLI job
+  # azure-cli-prd:
+  #   name: 'Azure CLI Production'
+  #   runs-on: ubuntu-latest
+  #   environment: production
 
-    defaults:
-      run:
-        shell: bash
+  #   needs: terraform # Ensures Terraform job completes before running Azure CLI job
 
-    steps:
-      # Step 1: Checkout repository
-      - name: Checkout
-        uses: actions/checkout@v4
+  #   defaults:
+  #     run:
+  #       shell: bash
 
-      # Step 2: Login to Azure CLI
-      - name: Azure CLI Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
+  #   steps:
+  #     # Step 1: Checkout repository
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      # Step 3: Execute Azure CLI Commands
-      - name: Azure CLI script
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az account show
-            # Add additional Azure CLI commands as needed
+  #     # Step 2: Login to Azure CLI
+  #     - name: Azure CLI Login
+  #       uses: azure/login@v2
+  #       with:
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
+
+  #     # Step 3: Execute Azure CLI Commands
+  #     - name: Azure CLI script
+  #       uses: azure/cli@v2
+  #       with:
+  #         azcliversion: latest
+  #         inlineScript: |
+  #           az account show
+  #           # Add additional Azure CLI commands as needed
