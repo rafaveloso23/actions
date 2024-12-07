@@ -38,7 +38,7 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false
 
-  azure-cli:
+  azure-cli-dev:
     name: 'Azure CLI Development'
     runs-on: ubuntu-latest
     environment: development
@@ -61,6 +61,39 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+
+      # Step 3: Execute Azure CLI Commands
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+            # Add additional Azure CLI commands as needed
+
+  azure-cli-prd:
+    name: 'Azure CLI Production'
+    runs-on: ubuntu-latest
+    environment: production
+
+    needs: terraform # Ensures Terraform job completes before running Azure CLI job
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Step 2: Login to Azure CLI
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
 
       # Step 3: Execute Azure CLI Commands
       - name: Azure CLI script
