@@ -71,13 +71,16 @@ jobs:
             az account show
             # Add additional Azure CLI commands as needed
 
-  annotation-example:
-    name: 'Annotation Example Job'
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Run with Annotations
-        run: |
-          echo "::error file=README.md,line=10,col=5::Something went wrong"
-          echo "::warning file=app.js,line=45,col=13::This is a warning"
-          echo "::notice file=index.html,line=8,col=2::This is a notice"
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Initialize
+        run: terraform init
+      - name: Plan
+        run: terraform plan -out .planfile
+      - name: Post PR comment
+        uses: borchero/terraform-plan-comment@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          #token: ${{ github.token }}
+          planfile: .planfile
