@@ -1,7 +1,7 @@
 # variable "oidc_token" {}
 # variable "oidc_token_file_path" {}
-variable "oidc_request_token" {}
-variable "oidc_request_url" {}
+# variable "oidc_request_token" {}
+# variable "oidc_request_url" {}
 
 # We strongly recommend using the required_providers block to set the
 # Azure Provider source and version being used
