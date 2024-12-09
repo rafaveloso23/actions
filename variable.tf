@@ -1,3 +1,3 @@
-# variable "azure_client_id" {
-#     type = string
-# }
+variable "environment" {
+    type = string
+}
