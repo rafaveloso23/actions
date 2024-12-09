@@ -4,6 +4,6 @@ resource "azurerm_resource_group" "rg-hub" {
 }
 
 resource "azurerm_resource_group" "rg-hub-dev" {
-  name     = "rg-actions-${var.environemnt}"
+  name     = "rg-actions-${var.environment}"
   location = "eastus"
 }
