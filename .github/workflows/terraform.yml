@@ -76,7 +76,7 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     needs: manual-approval
-    environment: development
+    environment: production
 
     steps:
       # Step 1: Checkout repository
