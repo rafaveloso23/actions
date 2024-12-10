@@ -47,11 +47,11 @@ jobs:
 
       # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var="environment=${{ secrets.ENVIRONMENT }}"
+        run: terraform plan -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
 
       # Step 7: Terraform Apply
       - name: Terraform Apply
-        run: terraform apply -var="environment=${{ secrets.ENVIRONMENT }}" -auto-approve
+        run: terraform apply -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
 
   manual-approval:
     name: Manual Approval
@@ -71,36 +71,42 @@ jobs:
           minimum-approvals: 1
           issue-title: "Manual Approval Required for Terraform Apply"
           issue-body: "Please approve or deny the deployment."
-          
-  # azure-cli-prd:
-  #   name: 'Azure CLI Production'
-  #   runs-on: ubuntu-latest
-  #   environment: production
 
-  #   needs: terraform # Ensures Terraform job completes before running Azure CLI job
+  terraform-prd:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    needs: manual-approval
+    environment: development
 
-  #   defaults:
-  #     run:
-  #       shell: bash
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #   steps:
-  #     # Step 1: Checkout repository
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+      # Step 2: Install Azure CLI
+      - name: Install Azure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y azure-cli
 
-  #     # Step 2: Login to Azure CLI
-  #     - name: Azure CLI Login
-  #       uses: azure/login@v2
-  #       with:
-  #         client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
-  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
+      # Step 2: Login to Azure CLI
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
 
-  #     # Step 3: Execute Azure CLI Commands
-  #     - name: Azure CLI script
-  #       uses: azure/cli@v2
-  #       with:
-  #         azcliversion: latest
-  #         inlineScript: |
-  #           az account show
-  #           # Add additional Azure CLI commands as needed
+      # Step 4: Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      # Step 5: Terraform Initialization
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 6: Terraform Apply
+      - name: Terraform Apply
+        run: terraform apply -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
