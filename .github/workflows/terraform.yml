@@ -53,11 +53,13 @@ jobs:
 
       # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var="client_id=${{secrets.WORKSPACE_DEV}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
+        env:
+          TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
+        run: terraform plan -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
 
       # Step 7: Terraform Apply
       - name: Terraform Apply
-        run: terraform apply -var="client_id=${{secrets.WORKSPACE_DEV}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+        run: terraform apply -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
 
   manual-approval:
     name: Manual Approval
