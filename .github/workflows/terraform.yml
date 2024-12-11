@@ -47,6 +47,8 @@ jobs:
 
       # Step 5: Terraform Initialization
       - name: Terraform Init
+        env:
+          TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
         run: terraform init
 
       # Step 6: Terraform Plan
@@ -109,12 +111,14 @@ jobs:
 
       # Step 5: Terraform Initialization
       - name: Terraform Init
+        env:
+           TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
         run: terraform init
 
       # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var="client_id=${{secrets.WORKSPACE_PRD}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
+        run: terraform plan -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
 
       # Step 7: Terraform Apply
       - name: Terraform Plan
-        run: terraform apply -var="client_id=${{secrets.WORKSPACE_PRD}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" --auto-approve 
+        run: terraform apply -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" --auto-approve 
