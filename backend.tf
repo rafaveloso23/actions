@@ -7,6 +7,8 @@
         workspaces {
           name = "stack-dev"
         },
+        workspace {
           name = "stack-prd"
+        }
       }
     }
