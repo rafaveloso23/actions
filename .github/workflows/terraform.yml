@@ -19,6 +19,8 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: development
+    env:
+      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
 
     steps:
       # Step 1: Checkout repository
