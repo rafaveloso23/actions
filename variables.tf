@@ -7,3 +7,8 @@ variable "client_id" {
     type = string
     default = null
 }
+
+variable "workspaces" {
+    type = string
+    default = null
+}

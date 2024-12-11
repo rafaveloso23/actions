@@ -51,11 +51,11 @@ jobs:
 
       # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
+        run: terraform plan -var="client_id=${{secrets.WORKSPACE_DEV}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
 
       # Step 7: Terraform Apply
       - name: Terraform Apply
-        run: terraform apply -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+        run: terraform apply -var="client_id=${{secrets.WORKSPACE_DEV}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
 
   manual-approval:
     name: Manual Approval
@@ -113,8 +113,8 @@ jobs:
 
       # Step 6: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
+        run: terraform plan -var="client_id=${{secrets.WORKSPACE_PRD}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
 
       # Step 7: Terraform Apply
       - name: Terraform Plan
-        run: terraform apply -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" --auto-approve 
+        run: terraform apply -var="client_id=${{secrets.WORKSPACE_PRD}}" -var="client_id=${{secrets.AZURE_CLIENT_ID_PRD}}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" --auto-approve 
