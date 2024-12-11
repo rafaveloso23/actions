@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "rg-hub-dev" {
-  name     = "rg-actions-et-${var.environment}"
+  name     = "rg-actions-est-${var.environment}"
   location = "eastus"
 }
