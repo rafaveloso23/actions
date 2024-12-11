@@ -1,0 +1,30 @@
+name: Resourcely CI
+
+# Trigger conditions for running this action
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Permissions for the action
+permissions:
+  contents: read  # Read repository content
+  packages: read  # Read packages from the repository
+
+# Define jobs to be run
+jobs:
+  # Name of the job
+  resourcely-ci:
+    runs-on: ubuntu-latest  # The type of machine to run the job on
+    steps:
+      - uses: Resourcely-Inc/resourcely-action@v1
+        with:
+          # grab the GitHub access token stored in the repo secrets
+          gh_access_token: ${{ secrets.GH_ACCESS_TOKEN }}
+          # grab the terraform api token stored in the repo secrets
+          tf_api_token: ${{ secrets.TF_API_TOKEN }}
+          # grab the resourcely api token stored in the repo secrets
+          resourcely_api_token: ${{ secrets.RESOURCELY_API_TOKEN }}
+          # set the resourcely api host
+          resourcely_api_host: "https://api.resourcely.io"

@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - "main"
+    paths:
+      - "main.tf"
   pull_request:
+    paths:
+      - "main.tf"
 
 permissions:
   contents: read
