@@ -21,6 +21,7 @@ jobs:
     environment: development
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
+      TF_LOG: DEBUG
 
     steps:
       # Step 1: Checkout repository
