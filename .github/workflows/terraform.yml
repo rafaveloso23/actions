@@ -25,17 +25,14 @@ jobs:
       PATH_TO_MODULE: rg-vnet
 
     steps:
-      # Step 1: Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Step 2: Install Azure CLI
       - name: Install Azure CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y azure-cli
 
-      # Step 3: Login to Azure CLI
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
@@ -43,25 +40,21 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
 
-      # Step 4: Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      # Step 5: Terraform Initialization
       - name: Terraform Init
         run: |
           cd $PATH_TO_MODULE
           terraform init
 
-      # Step 6: Terraform Plan
       - name: Terraform Plan
         run: |
           cd $PATH_TO_MODULE
           terraform plan -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
 
-      # Step 7: Terraform Apply
       - name: Terraform Apply
         run: |
           cd $PATH_TO_MODULE
@@ -72,7 +65,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: terraform-dev
     if: success()
-    
     permissions:
       issues: write
 
@@ -96,17 +88,14 @@ jobs:
       PATH_TO_MODULE: rg-vnet
 
     steps:
-      # Step 1: Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Step 2: Install Azure CLI
       - name: Install Azure CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y azure-cli
 
-      # Step 3: Login to Azure CLI
       - name: Azure CLI Login
         uses: azure/login@v2
         with:
@@ -114,20 +103,119 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
 
-      # Step 4: Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      # Step 5: Terraform Initialization
       - name: Terraform Init
         run: |
           cd $PATH_TO_MODULE
           terraform init
 
-      # Step 6: Terraform Destroy
       - name: Terraform Destroy
         run: |
           cd $PATH_TO_MODULE
           terraform destroy -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+
+  terraform-prd:
+    name: 'terraform-prd'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
+      PATH_TO_MODULE: rg-vnet
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Azure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y azure-cli
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: |
+          cd $PATH_TO_MODULE
+          terraform init
+
+      - name: Terraform Plan
+        run: |
+          cd $PATH_TO_MODULE
+          terraform plan -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
+
+      - name: Terraform Apply
+        run: |
+          cd $PATH_TO_MODULE
+          terraform apply -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
+
+  manual-approval-destroy-prd:
+    name: Manual Approval
+    runs-on: ubuntu-latest
+    needs: terraform-prd
+    if: success()
+    permissions:
+      issues: write
+
+    steps:
+      - name: Await Manual Approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: rafaveloso23
+          minimum-approvals: 1
+          issue-title: "Manual Approval Required for Terraform Destroy"
+          issue-body: "Please approve or deny the deployment."
+
+  terraform-destroy-prd:
+    name: 'terraform-destroy-prd'
+    runs-on: ubuntu-latest
+    needs: manual-approval-destroy-prd
+    environment: production
+    env:
+      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
+      PATH_TO_MODULE: rg-vnet
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Azure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y azure-cli
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: |
+          cd $PATH_TO_MODULE
+          terraform init
+
+      - name: Terraform Destroy
+        run: |
+          cd $PATH_TO_MODULE
+          terraform destroy -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
