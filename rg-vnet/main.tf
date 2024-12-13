@@ -1,8 +1,7 @@
 module "rg" {
-  source = "git::https://github.com/rafaveloso23/tf-modules.git//rg-vnet?ref=main"
+  source = "git::https://github.com/rafaveloso23/tf-modules.git//rg?ref=main"
 
-  # Add module-specific variables
-  name       = "example-rg"
-  location   = "eastus"
-
+  # Add any necessary input variables for the module here
+  rg_name       = "examplse-rg"
+  rg_location   = "eastus"
 }
