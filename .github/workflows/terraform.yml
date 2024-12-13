@@ -5,10 +5,10 @@ on:
     branches:
       - "main"
     paths:
-      - "main.tf"
+      - "./rg-vnet/*"
   pull_request:
     paths:
-      - "main.tf"
+      - "./rg-vnet/*"
 
 permissions:
   contents: read
