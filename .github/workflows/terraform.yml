@@ -30,7 +30,7 @@ jobs:
 
       - name: Configure Git Credentials
         run: |
-          git config --global url."https://${{ secrets.TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://${{ secrets.REPO_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
       
     
 
