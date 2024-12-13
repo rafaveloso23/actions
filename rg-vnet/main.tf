@@ -4,4 +4,5 @@ module "rg" {
   # Add any necessary input variables for the module here
   rg_name       = "examplse-rg"
   rg_location   = "eastus"
+  environment   = var.environment
 }
