@@ -28,7 +28,7 @@ variable "rg_existente" {
 variable "rg_name" {
   description = "Base name for the resource group"
   type        = string
-  default     = "rg-domain-rvs-dev"
+  default     = "rg-actions"
 
 #   validation {
 #     condition     = var.rg_existente == false || var.rg_name != ""
