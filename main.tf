@@ -19,7 +19,7 @@ locals {
 
 # Use the determined resource group for dependent resources
 resource "azurerm_virtual_network" "vnet_spoke" {
-  name                = "vnet-spoke"
+  name                = "vnet-sspoke"
   location            = local.resource_group_location
   resource_group_name = local.resource_group_name
   address_space       = ["10.1.0.0/16"]
