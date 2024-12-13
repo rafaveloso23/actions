@@ -29,11 +29,6 @@ variable "rg_name" {
   description = "Base name for the resource group"
   type        = string
   default     = "rg-actaions"
-
-#   validation {
-#     condition     = var.rg_existente == false || var.rg_name != ""
-#     error_message = "When rg_existente is true, rg_name must not be empty."
-#   }
 }
 
 variable "rg_location" {

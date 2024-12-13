@@ -5,6 +5,7 @@ terraform {
 
     workspaces {
       project = "Default Project"
+      #name = "tst"
     }
   }
 }
