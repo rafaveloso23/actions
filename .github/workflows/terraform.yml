@@ -3,12 +3,14 @@ name: Terraform, Azure CLI, and Annotations Workflow
 on:
   push:
     branches:
-      - "main"
+      - main
     paths:
-      - "./rg-vnet/*"
+      - rg-vnet/**
+
   pull_request:
     paths:
-      - "./rg-vnet/*"
+      - rg-vnet/**
+
 
 permissions:
   contents: read
