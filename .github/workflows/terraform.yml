@@ -119,7 +119,7 @@ jobs:
 
       # Step 6: Terraform Destroy
       - name: Terraform Destroy
-        run: terraform Destroy -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+        run: terraform destroy -var="client_id=${{secrets.AZURE_CLIENT_ID_DEV}}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
 
 
   terraform-prd:
