@@ -2,7 +2,7 @@
 resource "azurerm_key_vault" "kv" {
   for_each = var.kv_novo ? { "new" = "${var.kv_name}-${var.environment}" } : {}
   name                        = each.value
-  location                    = loca.resource_group_location
+  location                    = local.resource_group_location
   resource_group_name         = local.resource_group_name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
