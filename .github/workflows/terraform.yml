@@ -57,12 +57,12 @@ jobs:
       - name: Terraform Plan
         run: |
           cd $PATH_TO_MODULE
-          terraform plan -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
+          terraform plan -var-file="tfvars.tf" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
 
       - name: Terraform Apply
         run: |
           cd $PATH_TO_MODULE
-          terraform apply -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+          terraform apply -var-file="tfvars.tf" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
 
   manual-approval-destroy-dev:
     name: Manual Approval
@@ -124,7 +124,7 @@ jobs:
       - name: Terraform Destroy
         run: |
           cd $PATH_TO_MODULE
-          terraform destroy -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+          terraform destroy -var-file="tfvars.tf" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
 
   terraform-prd:
     name: 'terraform-prd'
@@ -167,12 +167,12 @@ jobs:
       - name: Terraform Plan
         run: |
           cd $PATH_TO_MODULE
-          terraform plan -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
+          terraform plan -var-file="tfvars.tf" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
 
       - name: Terraform Apply
         run: |
           cd $PATH_TO_MODULE
-          terraform apply -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
+          terraform apply -var-file="tfvars.tf" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
 
   manual-approval-destroy-prd:
     name: Manual Approval
@@ -234,4 +234,4 @@ jobs:
       - name: Terraform Destroy
         run: |
           cd $PATH_TO_MODULE
-          terraform destroy -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
+          terraform destroy -var-file="tfvars.tf" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve

@@ -16,7 +16,7 @@ variable "workspaces" {
 variable "rg_novo" {
   description = "Indicates whether to create a new resource group"
   type        = bool
-  default     = true
+  #default     = true
 }
 
 variable "rg_existente" {
@@ -28,11 +28,29 @@ variable "rg_existente" {
 variable "rg_name" {
   description = "Base name for the resource group"
   type        = string
-  default     = "rg-actions"
+  #default     = "rg-actions"
 }
 
 variable "rg_location" {
   description = "Azure region for the resource group"
   type        = string
-  default     = "eastus"
+  #default     = "eastus"
+}
+
+variable "sku_name_kv" {
+  type = string
+}
+
+variable "kv_name" {
+  type = string
+}
+
+variable "kv_novo" {
+  type = bool
+}
+
+variable "kv_existente" {
+  description = "Indicates whether to use an existing key vault"
+  type        = bool
+  default     = false
 }
