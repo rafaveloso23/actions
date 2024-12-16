@@ -52,7 +52,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd $PATH_TO_MODULE
-          terraform init
+          terraform init -var-file="tfvars.tf"
 
       - name: Terraform Plan
         run: |
@@ -119,7 +119,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd $PATH_TO_MODULE
-          terraform init
+          terraform init -var-file="tfvars.tf"
 
       - name: Terraform Destroy
         run: |
@@ -162,7 +162,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd $PATH_TO_MODULE
-          terraform init
+          terraform init -var-file="tfvars.tf"
 
       - name: Terraform Plan
         run: |
@@ -229,7 +229,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd $PATH_TO_MODULE
-          terraform init
+          terraform init -var-file="tfvars.tf"
 
       - name: Terraform Destroy
         run: |
