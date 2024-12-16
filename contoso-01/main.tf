@@ -1,4 +1,4 @@
-module "rg" {
+module "vnet" {
   source = "git::https://github.com/rafaveloso23/tf-modules.git//vnet?ref=main"
 
   # Add any necessary input variables for the module here

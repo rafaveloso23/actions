@@ -4,3 +4,9 @@ rg-vnet/.terraform/modules/modules.json
 rg-vnet/.terraform/terraform.tfstate
 rg-vnet/.terraform/environment
 rg-vnet/.terraform.lock.hcl
+contoso-01/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.1.0/linux_amd64/terraform-provider-azurerm_v4.1.0_x5
+contoso-01/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.1.0/linux_amd64/LICENSE.txt
+contoso-01/.terraform/modules/modules.json
+contoso-01/.terraform/terraform.tfstate
+contoso-01/.terraform/environment
+contoso-01/.terraform.lock.hcl

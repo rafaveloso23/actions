@@ -54,3 +54,13 @@ variable "kv_existente" {
   type        = bool
   default     = false
 }
+
+variable "soft_delete_retention_days" {
+  description = "Indicates whether to use an existing key vault"
+  type        = number
+}
+
+variable "purge_protection_enabled" {
+  description = "Indicates whether to use an existing key vault"
+  type        = bool
+}
