@@ -1,5 +1,5 @@
 module "rg" {
-  source = "git::https://github.com/rafaveloso23/tf-modules.git//rg?ref=main"
+  source = "git::https://github.com/rafaveloso23/tf-modules.git//vnet?ref=main"
 
   # Add any necessary input variables for the module here
   rg_name       = "example-rg"
