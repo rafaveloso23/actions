@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - rg-vnet/**
+      - contoso-01/**
 
   pull_request:
     paths:
