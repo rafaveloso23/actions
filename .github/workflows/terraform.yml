@@ -9,7 +9,7 @@ on:
 
   pull_request:
     paths:
-      - rg-vnet/**
+      - contoso-01/**
 
 permissions:
   contents: read
@@ -22,7 +22,7 @@ jobs:
     environment: development
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
-      PATH_TO_MODULE: rg-vnet
+      PATH_TO_MODULE: contoso-01
 
     steps:
       - name: Checkout
@@ -89,7 +89,7 @@ jobs:
     environment: development
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
-      PATH_TO_MODULE: rg-vnet
+      PATH_TO_MODULE: contoso-01
 
     steps:
       - name: Checkout
@@ -132,7 +132,7 @@ jobs:
     environment: production
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
-      PATH_TO_MODULE: rg-vnet
+      PATH_TO_MODULE: contoso-01
 
     steps:
       - name: Checkout
@@ -199,7 +199,7 @@ jobs:
     environment: production
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
-      PATH_TO_MODULE: rg-vnet
+      PATH_TO_MODULE: contoso-01
 
     steps:
       - name: Checkout
