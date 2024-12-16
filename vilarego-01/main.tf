@@ -5,4 +5,5 @@ module "rg" {
   rg_name       = "examples-rg"
   rg_location   = "eastus"
   environment   = var.environment
+  rg_novo       = true
 }
