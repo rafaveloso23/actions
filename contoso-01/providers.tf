@@ -11,7 +11,7 @@ terraform {
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {
-    keyvault {
+    key_vault {
       purge_soft_delete_on_destroy = false
     }
   }
