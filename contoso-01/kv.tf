@@ -1,4 +1,3 @@
-# Use the determined resource group for dependent resources
 resource "azurerm_key_vault" "kv" {
   for_each = var.kv_novo ? { "new" = "${var.kv_name}-${var.environment}" } : {}
   name                        = each.value
