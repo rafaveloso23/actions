@@ -3,9 +3,9 @@ module "kv" {
 
   kv_novo                    = true
   kv_existente               = false
-  name                       = module.rg.resource_group_name
+  name                       = "kvrvsfs-${var.environment}"
   location                   = module.rg.resource_group_location
-  rg_name                    = "rg-actions-dev"
+  rg_name                    = module.rg.resource_group_name
   soft_delete_retention_days = 10
   purge_protection_enabled   = false
   sku_name                   = "standard"

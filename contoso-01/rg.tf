@@ -3,6 +3,6 @@ module "rg" {
 
   rg_novo      = true
   rg_existente = false
-  name         = "rg-actions-dev"
+  name         = "rg-actions-${var.environment}"
   location     = "eastus"
 }
