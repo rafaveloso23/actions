@@ -1,5 +1,8 @@
-resource "azurerm_resource_group" "rg_hub" {
-  for_each = var.rg_novo ? { "new" = "${var.rg_name}-${var.environment}" } : {}
-  name     = each.value
-  location = var.rg_location
+module "rg" {
+  source = "git::https://github.com/rafaveloso23/tf-modules.git//rg?ref=main"
+
+  rg_novo      = true
+  rg_existente = false
+  name         = "rg-actions-dev"
+  location     = "eastus"
 }
