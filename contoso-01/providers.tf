@@ -23,4 +23,4 @@ provider "azurerm" {
   tenant_id = "0eed3ea8-f35c-4862-b14a-9809318064c7"
 }
 
-data "azurerm_client_config" "current" {}
+# data "azurerm_client_config" "current" {}

@@ -10,3 +10,4 @@ contoso-01/.terraform/modules/modules.json
 contoso-01/.terraform/terraform.tfstate
 contoso-01/.terraform/environment
 contoso-01/.terraform.lock.hcl
+contoso-01/.terraform*
