@@ -123,6 +123,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y azure-cli
+
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+
       - name: Verify SP Access in Key Vault
         id: check-access
         run: |
@@ -142,12 +150,7 @@ jobs:
         run: |
             echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
 
-      - name: Azure CLI Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -193,11 +196,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
       - name: Verify SP Access in Key Vault
         id: check-access
         run: |
@@ -216,6 +214,11 @@ jobs:
       - name: Debug Access Policy Result
         run: |
             echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -278,6 +281,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y azure-cli
 
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
+
       - name: Verify SP Access in Key Vault
         id: check-access
         run: |
@@ -297,12 +307,6 @@ jobs:
         run: |
             echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
 
-      - name: Azure CLI Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID_PRD }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRD }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
