@@ -49,15 +49,20 @@ jobs:
         id: check-access
         run: |
             # Fetch the access policies of the Azure Key Vault
-            ACCESS_POLICIES=$(az keyvault show --name testrkvsd --query properties.accessPolicies -o json)
+            ACCESS_POLICIES=$(az keyvault show --name ${{ secrets.AZURE_KEYVAULT_NAME_DEV }} --query properties.accessPolicies -o json)
   
             # Check if the CURRENT_OBJECT_ID exists in the access policies
             if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_DEV }}\")" > /dev/null; then
               echo "SP Object ID is present in the Key Vault access policy."
+              echo "ACCESS_POLICY_EXISTS=true" >> $GITHUB_ENV
             else
               echo "SP Object ID is NOT present in the Key Vault access policy."
-              exit 1
+              echo "ACCESS_POLICY_EXISTS=false" >> $GITHUB_ENV
             fi
+  
+      - name: Debug Access Policy Result
+        run: |
+            echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -72,12 +77,12 @@ jobs:
       - name: Terraform Plan
         run: |
           cd $PATH_TO_MODULE
-          terraform plan -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
+          terraform plan -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS"
 
       - name: Terraform Apply
         run: |
           cd $PATH_TO_MODULE
-          terraform apply -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+          terraform apply -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS" -auto-approve
 
   manual-approval-destroy-dev:
     name: Manual Approval
