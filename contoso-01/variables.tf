@@ -1,15 +1,15 @@
 variable "environment" {
-    type = string
+    type    = string
     default = "dev"
 }
 
 variable "client_id" {
-    type = string
+    type    = string
     default = null
 }
 
 variable "workspaces" {
-    type = string
+    type    = string
     default = null
 }
 

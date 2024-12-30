@@ -261,7 +261,6 @@ jobs:
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
       PATH_TO_MODULE: contoso-01
-      CURRENT_OBJECT_ID: ${{ secrets.OBJECT_ID_PRD}}
 
     steps:
       - name: Checkout
