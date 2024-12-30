@@ -144,7 +144,7 @@ jobs:
       - name: Terraform Destroy
         run: |
           cd $PATH_TO_MODULE
-          terraform destroy -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
+          terraform destroy -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS" -auto-approve
 
   terraform-prd:
     name: 'terraform-prd'
@@ -153,6 +153,7 @@ jobs:
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
       PATH_TO_MODULE: contoso-01
+      CURRENT_OBJECT_ID: ${{ secrets.OBJECT_ID_PRD}}
 
     steps:
       - name: Checkout
@@ -179,6 +180,30 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - name: Verify SP Access in Key Vault
+        id: check-access
+        run: |
+            # Fetch the access policies of the Azure Key Vault
+            ACCESS_POLICIES=$(az keyvault show --name "kvrvstfsd" --query properties.accessPolicies -o json)
+  
+            # Check if the CURRENT_OBJECT_ID exists in the access policies
+            if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_PRD }}\")" > /dev/null; then
+              echo "SP Object ID is present in the Key Vault access policy."
+              echo "ACCESS_POLICY_EXISTS=true" >> $GITHUB_ENV
+            else
+              echo "SP Object ID is NOT present in the Key Vault access policy."
+              echo "ACCESS_POLICY_EXISTS=false" >> $GITHUB_ENV
+            fi
+  
+      - name: Debug Access Policy Result
+        run: |
+            echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
       - name: Terraform Init
         run: |
           cd $PATH_TO_MODULE
@@ -187,12 +212,12 @@ jobs:
       - name: Terraform Plan
         run: |
           cd $PATH_TO_MODULE
-          terraform plan -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}"
+          terraform plan -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS"
 
       - name: Terraform Apply
         run: |
           cd $PATH_TO_MODULE
-          terraform apply -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
+          terraform apply -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS" -auto-approve
 
   manual-approval-destroy-prd:
     name: Manual Approval
@@ -220,6 +245,7 @@ jobs:
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_PRD }}
       PATH_TO_MODULE: contoso-01
+      CURRENT_OBJECT_ID: ${{ secrets.OBJECT_ID_PRD}}
 
     steps:
       - name: Checkout
@@ -254,4 +280,4 @@ jobs:
       - name: Terraform Destroy
         run: |
           cd $PATH_TO_MODULE
-          terraform destroy -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -auto-approve
+          terraform destroy -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_PRD }}" -var="environment=${{ secrets.ENVIRONMENT_PRD }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS" -auto-approve
