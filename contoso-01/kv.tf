@@ -1,9 +1,3 @@
-module "access_policy_validate" {
-  source = "git::https://github.com/rafaveloso23/tf-modules.git//data_access_policy?ref=main"
-  rg_name = module.rg.resource_group_name
-  name    = "kvrvstfsd"
-}
-
 module "kv" {
   source = "git::https://github.com/rafaveloso23/tf-modules.git//kv?ref=main"
 

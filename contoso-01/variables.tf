@@ -15,6 +15,7 @@ variable "workspaces" {
 
 variable "current_object_exist" {
     type    = bool
+    # default = true
 }
 
 # variable "rg_novo" {
