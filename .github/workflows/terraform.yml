@@ -49,7 +49,7 @@ jobs:
         id: check-access
         run: |
             # Fetch the access policies of the Azure Key Vault
-            ACCESS_POLICIES=$(az keyvault show --name ${{ secrets.AZURE_KEYVAULT_NAME_DEV }} --query properties.accessPolicies -o json)
+            ACCESS_POLICIES=$(az keyvault show --name "kvrvstfsd" --query properties.accessPolicies -o json)
   
             # Check if the CURRENT_OBJECT_ID exists in the access policies
             if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_DEV }}\")" > /dev/null; then
