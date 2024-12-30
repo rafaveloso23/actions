@@ -1,12 +1,16 @@
+module "access_policy_validate" {
+  source = "git::https://github.com/rafaveloso23/tf-modules.git//data_access_policy?ref=main"
+  rg_name = module.rg.resource_group_name
+  name    = "testrkvsd"
+}
+
 module "kv" {
   source = "git::https://github.com/rafaveloso23/tf-modules.git//kv?ref=main"
 
-  kv_novo                    = true
-  kv_existente               = false
-  name                       = "kvrvsfs-${var.environment}"
+  kv_novo                    = false
+  kv_existente               = true
+  name                       = "testrkvsd"
   location                   = module.rg.resource_group_location
   rg_name                    = module.rg.resource_group_name
-  soft_delete_retention_days = 10
-  purge_protection_enabled   = false
-  sku_name                   = "standard"
+  is_object_id_in_list       = var.current_object_exist
 }

@@ -1,8 +1,8 @@
 module "rg" {
   source = "git::https://github.com/rafaveloso23/tf-modules.git//rg?ref=main"
 
-  rg_novo      = true
-  rg_existente = false
-  name         = "rg-actions-${var.environment}"
+  rg_novo      = false
+  rg_existente = true
+  name         = "testerg"
   location     = "eastus"
 }

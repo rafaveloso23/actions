@@ -23,6 +23,7 @@ jobs:
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
       PATH_TO_MODULE: contoso-01
+      CURRENT_OBJECT_ID: ${{ secrets.OBJECT_ID_DEV}}
 
     steps:
       - name: Checkout
@@ -43,6 +44,20 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+
+      - name: Verify SP Access in Key Vault
+        id: check-access
+        run: |
+            # Fetch the access policies of the Azure Key Vault
+            ACCESS_POLICIES=$(az keyvault show --name testrkvsd --query properties.accessPolicies -o json)
+  
+            # Check if the CURRENT_OBJECT_ID exists in the access policies
+            if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_DEV }}\")" > /dev/null; then
+              echo "SP Object ID is present in the Key Vault access policy."
+            else
+              echo "SP Object ID is NOT present in the Key Vault access policy."
+              exit 1
+            fi
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1

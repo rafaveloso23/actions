@@ -13,6 +13,11 @@ variable "workspaces" {
     default = null
 }
 
+variable "current_object_exist" {
+    type    = bool
+    default = false
+}
+
 # variable "rg_novo" {
 #   description = "Indicates whether to create a new resource group"
 #   type        = bool
