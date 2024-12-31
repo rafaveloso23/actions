@@ -24,7 +24,6 @@ jobs:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
       PATH_TO_MODULE: contoso-01
       CURRENT_OBJECT_ID: ${{ secrets.OBJECT_ID_DEV}}
-      TF_LOG: DEBUG
 
     steps:
       - name: Checkout
