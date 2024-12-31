@@ -75,14 +75,24 @@ jobs:
           terraform init -var-file="terraform.tfvars"
 
       - name: Terraform Plan
+        env:
+          ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
         run: |
           cd $PATH_TO_MODULE
-          terraform plan -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS"
+          terraform plan -var-file="terraform.tfvars" \
+            -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
+            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" \
+            -var="current_object_exist=${{ env.ACCESS_POLICY_EXISTS }}"
 
       - name: Terraform Apply
+        env:
+          ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
         run: |
           cd $PATH_TO_MODULE
-          terraform apply -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS" -auto-approve
+          terraform apply -var-file="terraform.tfvars" \
+            -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
+            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" \
+            -var="current_object_exist=${ACCESS_POLICY_EXISTS}" -auto-approve
 
   manual-approval-destroy-dev:
     name: Manual Approval
@@ -163,6 +173,11 @@ jobs:
           terraform init -var-file="terraform.tfvars"
 
       - name: Terraform Destroy
+        env:
+          ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
         run: |
           cd $PATH_TO_MODULE
-          terraform destroy -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -var="current_object_exist=$ACCESS_POLICY_EXISTS" -auto-approve
+          terraform destroy -var-file="terraform.tfvars" \
+            -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
+            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" \
+            -var="current_object_exist=${ACCESS_POLICY_EXISTS}" -auto-approve
