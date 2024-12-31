@@ -75,8 +75,8 @@ jobs:
           terraform init -var-file="terraform.tfvars"
 
       - name: Terraform Plan
-        env:
-          ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
+        # env:
+        #   ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
         run: |
           cd $PATH_TO_MODULE
           terraform plan -var-file="terraform.tfvars" \
