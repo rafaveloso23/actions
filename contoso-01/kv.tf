@@ -7,3 +7,4 @@ module "kv" {
   location                   = module.rg.resource_group_location
   rg_name                    = module.rg.resource_group_name
 }
+#
