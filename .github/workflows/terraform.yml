@@ -23,7 +23,7 @@ jobs:
     env:
       TF_WORKSPACE: ${{ secrets.TF_WORKSPACE_DEV }}
       PATH_TO_MODULE: contoso-01
-      CURRENT_OBJECT_ID: ${{ secrets.OBJECT_ID_DEV}}
+      # CURRENT_OBJECT_ID: ${{ secrets.OBJECT_ID_DEV}}
 
     steps:
       - name: Checkout
@@ -45,24 +45,24 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
 
-      - name: Verify SP Access in Key Vault
-        id: check-access
-        run: |
-            # Fetch the access policies of the Azure Key Vault
-            ACCESS_POLICIES=$(az keyvault show --name "kvrvstfsd" --query properties.accessPolicies -o json)
+      # - name: Verify SP Access in Key Vault
+      #   id: check-access
+      #   run: |
+      #       # Fetch the access policies of the Azure Key Vault
+      #       ACCESS_POLICIES=$(az keyvault show --name "kvrvstfsd" --query properties.accessPolicies -o json)
   
-            # Check if the CURRENT_OBJECT_ID exists in the access policies
-            if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_DEV }}\")" > /dev/null; then
-              echo "SP Object ID is present in the Key Vault access policy."
-              echo "ACCESS_POLICY_EXISTS=true" >> $GITHUB_ENV
-            else
-              echo "SP Object ID is NOT present in the Key Vault access policy."
-              echo "ACCESS_POLICY_EXISTS=false" >> $GITHUB_ENV
-            fi
+      #       # Check if the CURRENT_OBJECT_ID exists in the access policies
+      #       if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_DEV }}\")" > /dev/null; then
+      #         echo "SP Object ID is present in the Key Vault access policy."
+      #         echo "ACCESS_POLICY_EXISTS=true" >> $GITHUB_ENV
+      #       else
+      #         echo "SP Object ID is NOT present in the Key Vault access policy."
+      #         echo "ACCESS_POLICY_EXISTS=false" >> $GITHUB_ENV
+      #       fi
   
-      - name: Debug Access Policy Result
-        run: |
-            echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
+      # - name: Debug Access Policy Result
+      #   run: |
+      #       echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -81,18 +81,16 @@ jobs:
           cd $PATH_TO_MODULE
           terraform plan -var-file="terraform.tfvars" \
             -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
-            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" \
-            -var="current_object_exist=${{ env.ACCESS_POLICY_EXISTS }}"
+            -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
 
       - name: Terraform Apply
-        env:
-          ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
+        # env:
+        #   ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
         run: |
           cd $PATH_TO_MODULE
           terraform apply -var-file="terraform.tfvars" \
             -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
-            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" \
-            -var="current_object_exist=${ACCESS_POLICY_EXISTS}" -auto-approve
+            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
 
   manual-approval-destroy-dev:
     name: Manual Approval
@@ -141,24 +139,24 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
 
-      - name: Verify SP Access in Key Vault
-        id: check-access
-        run: |
-            # Fetch the access policies of the Azure Key Vault
-            ACCESS_POLICIES=$(az keyvault show --name "kvrvstfsd" --query properties.accessPolicies -o json)
+      # - name: Verify SP Access in Key Vault
+      #   id: check-access
+      #   run: |
+      #       # Fetch the access policies of the Azure Key Vault
+      #       ACCESS_POLICIES=$(az keyvault show --name "kvrvstfsd" --query properties.accessPolicies -o json)
   
-            # Check if the CURRENT_OBJECT_ID exists in the access policies
-            if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_DEV }}\")" > /dev/null; then
-              echo "SP Object ID is present in the Key Vault access policy."
-              echo "ACCESS_POLICY_EXISTS=true" >> $GITHUB_ENV
-            else
-              echo "SP Object ID is NOT present in the Key Vault access policy."
-              echo "ACCESS_POLICY_EXISTS=false" >> $GITHUB_ENV
-            fi
+      #       # Check if the CURRENT_OBJECT_ID exists in the access policies
+      #       if echo "$ACCESS_POLICIES" | jq -e ".[] | select(.objectId==\"${{ secrets.OBJECT_ID_DEV }}\")" > /dev/null; then
+      #         echo "SP Object ID is present in the Key Vault access policy."
+      #         echo "ACCESS_POLICY_EXISTS=true" >> $GITHUB_ENV
+      #       else
+      #         echo "SP Object ID is NOT present in the Key Vault access policy."
+      #         echo "ACCESS_POLICY_EXISTS=false" >> $GITHUB_ENV
+      #       fi
   
-      - name: Debug Access Policy Result
-        run: |
-            echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
+      # - name: Debug Access Policy Result
+      #   run: |
+      #       echo "Access Policy Exists: $ACCESS_POLICY_EXISTS"
 
 
 
@@ -173,11 +171,10 @@ jobs:
           terraform init -var-file="terraform.tfvars"
 
       - name: Terraform Destroy
-        env:
-          ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
+        # env:
+        #   ACCESS_POLICY_EXISTS: ${{ env.ACCESS_POLICY_EXISTS }}
         run: |
           cd $PATH_TO_MODULE
           terraform destroy -var-file="terraform.tfvars" \
             -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" \
-            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" \
-            -var="current_object_exist=${ACCESS_POLICY_EXISTS}" -auto-approve
+            -var="environment=${{ secrets.ENVIRONMENT_DEV }}" -auto-approve
