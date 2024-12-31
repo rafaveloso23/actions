@@ -5,7 +5,7 @@ terraform {
 
     workspaces {
       project = "Default Project"
-      #name    = "stacks-prd"
+      name    = "stacks-prd"
     }
   }
 }
