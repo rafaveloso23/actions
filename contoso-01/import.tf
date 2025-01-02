@@ -6,8 +6,8 @@ import {
 
 
 data "azurerm_key_vault" "example" {
-  name                = var.kv_name
-  resource_group_name = var.rg_name
+  name                = module.kv.key_vault_name
+  resource_group_name = module.rg.resource_group_name
 }
 
 
