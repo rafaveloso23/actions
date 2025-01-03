@@ -28,18 +28,12 @@ variable "rg_existente" {
 variable "rg_name" {
   description = "Base name for the resource group"
   type        = string
-  #default     = "rg-actions"
 }
 
 variable "rg_location" {
   description = "Azure region for the resource group"
   type        = string
-  #default     = "eastus"
 }
-
-# variable "sku_name_kv" {
-#   type = string
-# }
 
 variable "kv_name" {
   type = string
@@ -63,4 +57,8 @@ variable "kv_existente" {
 # variable "purge_protection_enabled" {
 #   description = "Indicates whether to use an existing key vault"
 #   type        = bool
+# }
+
+# variable "sku_name_kv" {
+#   type = string
 # }
