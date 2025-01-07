@@ -35,6 +35,10 @@ variable "rg_location" {
   type        = string
 }
 
+variable "specific_object_id" {
+  type = string
+}
+
 variable "kv_name" {
   type = string
 }

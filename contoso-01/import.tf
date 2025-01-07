@@ -4,7 +4,7 @@
 # The contains() function checks if the list [ "object-id-1", "object-id-2" ] includes the value of local.specific_object_id, doing this we are able to
 locals {
   data_kv_access_policy = module.kv.acces_policy
-  specific_object_id = module.kv.current_object_id
+  specific_object_id = var.specific_object_id
   execute_import = contains(
     [for policy in local.data_kv_access_policy : policy.object_id],
     local.specific_object_id
@@ -15,5 +15,8 @@ locals {
 import {
   for_each = local.execute_import ? { "default" = true } : {}
   to       = module.kv.azurerm_key_vault_access_policy.current["default"]
-  id       = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${module.rg.resource_group_name}/providers/Microsoft.KeyVault/vaults/${var.kv_name}/objectId/${module.kv.current_object_id}"
+  id       = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${module.rg.resource_group_name}/providers/Microsoft.KeyVault/vaults/${var.kv_name}/objectId/${var.specific_object_id}"
 }
+
+
+#access policy object id
