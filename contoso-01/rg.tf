@@ -1,8 +1,6 @@
 module "rg" {
   source = "git::https://github.com/rafaveloso23/tf-modules.git//rg?ref=main"
-
-  rg_novo      = var.rg_novo
-  rg_existente = var.kv_existente
-  name         = var.rg_name
+  for_each = var.rg_novo ? { "new" = "${var.rg_name_applicacao}" } : {}
+  name         = each.value
   location     = var.rg_location
 }

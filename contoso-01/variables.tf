@@ -1,22 +1,22 @@
 variable "environment" {
-    type    = string
-    default = "dev"
+  type    = string
+  default = "dev"
 }
 
 variable "client_id" {
-    type    = string
-    default = null
+  type    = string
+  default = null
 }
 
 variable "workspaces" {
-    type    = string
-    default = null
+  type    = string
+  default = null
 }
 
 variable "rg_novo" {
   description = "Indicates whether to create a new resource group"
   type        = bool
-  #default     = true
+  default     = true
 }
 
 variable "rg_existente" {
@@ -25,7 +25,12 @@ variable "rg_existente" {
   default     = false
 }
 
-variable "rg_name" {
+variable "rg_name_applicacao" {
+  description = "Base name for the resource group"
+  type        = string
+}
+
+variable "rg_name_kv" {
   description = "Base name for the resource group"
   type        = string
 }
@@ -53,16 +58,19 @@ variable "kv_existente" {
   default     = false
 }
 
-# variable "soft_delete_retention_days" {
-#   description = "Indicates whether to use an existing key vault"
-#   type        = number
-# }
+variable "soft_delete_retention_days" {
+  description = "Indicates whether to use an existing key vault"
+  type        = number
+  default     = null
+}
 
-# variable "purge_protection_enabled" {
-#   description = "Indicates whether to use an existing key vault"
-#   type        = bool
-# }
+variable "purge_protection_enabled" {
+  description = "Indicates whether to use an existing key vault"
+  type        = bool
+  default     = null
+}
 
-# variable "sku_name_kv" {
-#   type = string
-# }
+variable "sku_name_kv" {
+  type    = string
+  default = null
+}
