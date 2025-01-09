@@ -55,7 +55,7 @@ variable "kv_novo" {
 variable "kv_existente" {
   description = "Indicates whether to use an existing key vault"
   type        = bool
-  default     = false
+  # default     = false
 }
 
 variable "soft_delete_retention_days" {
@@ -73,4 +73,14 @@ variable "purge_protection_enabled" {
 variable "sku_name_kv" {
   type    = string
   default = null
+}
+
+variable "access_policies" {
+  type = map(object({
+    object_id          = string
+    key_permissions    = list(string)
+    secret_permissions = list(string)
+    certificate_permissions = list(string)
+  }))
+  default = {}
 }
