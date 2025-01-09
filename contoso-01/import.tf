@@ -1,9 +1,9 @@
 # # # This locals will iterate over each access_policy entries from 'local.data_kv_access_policy';
 # # # The 'policy.object_id' extracts the object_id from each policy, the result should be like this '[ "object-id-1", "object-id-2" ]';
 # # # The second argument will validate the specific object id that we are looking for 'local.specific_object_id'
-# # # The contains() function checks if the list [ "object-id-1", "object-id-2" ] includes the value of local.specific_object_id, doing this we are able to
+# # # The contains() function checks if the list [ "object-id-1", "object-id-2" ] includes the value of local.specific_object_id;
+# # # The combination of the functions contains(keys(...), ...) will give use the possibility to check if the specific object exist in the list of keys, if not the value will {}
 locals {
-  #data_kv_access_policy = data.azurerm_key_vault.kv["existing"].access_policy
   data_kv_access_policy = var.kv_existente && contains(keys(data.azurerm_key_vault.kv), "existing") ? data.azurerm_key_vault.kv["existing"].access_policy : []
   specific_object_id    = var.specific_object_id
   execute_import = contains(
