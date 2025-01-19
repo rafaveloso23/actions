@@ -19,6 +19,13 @@ variable "rg_novo" {
   default     = true
 }
 
+variable "criar_storage_account" {
+  description = "Indicates whether to create a new resource group"
+  type        = bool
+  default     = true
+}
+
+
 variable "rg_existente" {
   description = "Indicates whether to use an existing resource group"
   type        = bool

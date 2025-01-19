@@ -1,6 +1,7 @@
 # soft_delete_retention_days = 7
 # purge_protection_enabled   = false
 # sku_name_kv                = "standard"
+criar_storage_account      = false
 kv_novo                    = false
 kv_existente               = true
 kv_name                    = "kvrvstfsd"
