@@ -1,13 +1,13 @@
-# output "object_ids" {
-#   value = [for policy in local.data_kv_access_policy : policy.object_id]
-# }
+output "object_ids" {
+  value = [for policy in local.data_kv_access_policy : policy.object_id]
+}
 
-# output "object_id_found" {
-#   value = contains(
-#     [for policy in local.data_kv_access_policy : policy.object_id],
-#     local.specific_object_id
-#   )
-# }
+output "object_id_found" {
+  value = contains(
+    [for policy in local.data_kv_access_policy : policy.object_id],
+    local.specific_object_id
+  )
+}
 
 output "resource_group_id" {
   description = "The ID of the resource group created or retrieved."
