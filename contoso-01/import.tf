@@ -15,5 +15,5 @@ locals {
 import {
   for_each = local.execute_import ? { "default" = true } : {}
   to       = module.kv_policy.azurerm_key_vault_access_policy.current["default"]
-  id       = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.rg_name_kv}/providers/Microsoft.KeyVault/vaults/${var.kv_name}/objectId/${var.specific_object_id}"
+  id       = "${data.azurerm_key_vault.kv["existing"].id}/objectId/${var.specific_object_id}"
 }
