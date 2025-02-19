@@ -62,8 +62,9 @@ jobs:
       - name: Install HCP CLI
         run: |
           curl -Lo hcp-cli.zip https://releases.hashicorp.com/hcp/0.9.3/hcp_0.9.3_linux_amd64.zip
-          unzip hcp-cli.zip
-          sudo mv hcp /usr/local/bin/
+          unzip -o hcp-cli.zip -d /tmp
+          sudo mv /tmp/hcp /usr/local/bin/
+        
         
       - name: Run Sentinel Policy Check
         run: |
