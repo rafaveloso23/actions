@@ -59,13 +59,12 @@ jobs:
           cd $PATH_TO_MODULE
           terraform plan -var-file="terraform.tfvars" -var="client_id=${{ secrets.AZURE_CLIENT_ID_DEV }}" -var="environment=${{ secrets.ENVIRONMENT_DEV }}"
 
-      - name: Install HCP CLI
+      - name: Install Sentinel CLI
         run: |
-          curl -Lo hcp-cli.zip https://releases.hashicorp.com/hcp/0.9.3/hcp_0.9.3_linux_amd64.zip
-          unzip -o hcp-cli.zip -d /tmp
-          sudo mv /tmp/hcp /usr/local/bin/
-        
-        
+          wget https://releases.hashicorp.com/sentinel/0.30.0/sentinel_0.30.0_linux_amd64.zip
+          unzip -o sentinel_0.30.0_linux_amd64.zip
+          sudo mv sentinel /usr/local/bin/
+
       - name: Run Sentinel Policy Check
         run: |
           cd $PATH_TO_MODULE
