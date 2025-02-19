@@ -13,11 +13,11 @@ variable "workspaces" {
   default = null
 }
 
-# variable "rg_novo" {
-#   description = "Indicates whether to create a new resource group"
-#   type        = bool
-#   default     = true
-# }
+variable "rg_novo" {
+  description = "Indicates whether to create a new resource group"
+  type        = bool
+  default     = true
+}
 
 # variable "criar_storage_account" {
 #   description = "Indicates whether to create a new resource group"
@@ -32,20 +32,20 @@ variable "workspaces" {
 #   default     = false
 # }
 
-# variable "rg_name_applicacao" {
-#   description = "Base name for the resource group"
-#   type        = string
-# }
+variable "rg_name_applicacao" {
+  description = "Base name for the resource group"
+  type        = string
+}
 
 # variable "rg_name_kv" {
 #   description = "Base name for the resource group"
 #   type        = string
 # }
 
-# variable "rg_location" {
-#   description = "Azure region for the resource group"
-#   type        = string
-# }
+variable "rg_location" {
+  description = "Azure region for the resource group"
+  type        = string
+}
 
 # variable "specific_object_id" {
 #   type = string
