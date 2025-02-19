@@ -1,0 +1,14 @@
+import "tfplan"
+
+main = rule {
+  all tfplan.resources.azurerm_kubernetes_cluster as _, clusters {
+    all clusters as _, cluster {
+      internet_access := tfplan.variables.internet_access
+      cluster_name := cluster.applied.name
+
+      # Enforce the correct AKS cluster based on internet_access
+      (internet_access and cluster_name == "aks-cluster-02") or
+      (!internet_access and cluster_name == "aks-cluster-01")
+    }
+  }
+}
