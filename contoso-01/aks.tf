@@ -4,3 +4,4 @@ module "aks" {
   internet_access = true
   cluster_name    = "aks-cluster-01"
 }
+##
